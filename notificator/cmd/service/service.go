@@ -91,6 +91,13 @@ func Run() {
 	g := createService(eps)
 	initMetricsEndpoint(g)
 	initCancelInterrupt(g)
+	registar, err := registerService(logger)
+	if err != nil {
+		logger.Log(err)
+		return
+	}
+	defer registar.Deregister()
+
 	logger.Log("exit", g.Run())
 
 }
@@ -166,7 +173,7 @@ func registerService(logger log.Logger) (*sdetcd.Registrar, error) {
 
 	var (
 		etcdServer = "http://etcd:2379"
-		prefix     = "/services/notificator"
+		prefix     = "/services/notificator/"
 		instance   = "notificator:8082"
 		key        = prefix + instance
 	)
@@ -182,5 +189,6 @@ func registerService(logger log.Logger) (*sdetcd.Registrar, error) {
 	}, logger)
 
 	registrar.Register()
+	logger.Log("notificator register using etcd")
 	return registrar, nil
 }

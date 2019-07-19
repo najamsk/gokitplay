@@ -1,6 +1,10 @@
 package service
 
-import "context"
+import (
+	"context"
+
+	"github.com/twinj/uuid"
+)
 
 // NotificatorService describes the service.
 type NotificatorService interface {
@@ -13,7 +17,12 @@ type basicNotificatorService struct{}
 
 func (b *basicNotificatorService) SendEmail(ctx context.Context, email string, content string) (string, error) {
 	// TODO implement the business logic of SendEmail
-	return "", nil
+
+	id := uuid.NewV4()
+	// if err != nil {
+	// 	return "", err
+	// }
+	return id.String(), nil
 }
 
 // NewBasicNotificatorService returns a naive, stateless implementation of NotificatorService.
